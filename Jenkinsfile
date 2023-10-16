@@ -13,7 +13,9 @@ pipeline {
 
   stages {
     stage('Helm Chart Deploy'){
-      sh 'helm upgrade -i ${component} roboshop'
+      steps {
+        sh 'helm upgrade -i ${component} roboshop'
+      }
     }
   }
 
