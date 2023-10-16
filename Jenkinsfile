@@ -12,11 +12,25 @@ pipeline {
   }
 
   stages {
+    stage('Clone App Repo'){
+      steps{
+        dir('APP'){
+          git branch: 'main', url: 'http://github.com/sriteja28/${COMPONENT}'
+        }
+      }
+    }
     stage('Helm Chart Deploy'){
       steps {
         sh 'aws eks update-kubeconfig --name ${ENV}-eks'
-        sh 'helm upgrade -i ${COMPONENT} roboshop'
+        sh 'helm upgrade -i ${COMPONENT} roboshop -f APP/helm.yaml --set image.tag=${APP_VERSION}'
       }
+    }
+  }
+
+
+  post{
+    always{
+      cleanWs()
     }
   }
 
